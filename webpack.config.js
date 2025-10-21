@@ -19,6 +19,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: "./src/index.html",
+      minify: false, // ← Отключаем минификацию
     }),
   ],
   devServer: {

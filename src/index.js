@@ -23,6 +23,13 @@ const BUTTONS = [
   "=",
 ];
 
+const operations = {
+  "+": 1,
+  "-": 1,
+  "÷": 2,
+  "×": 2,
+  "=": 3,
+};
 document.addEventListener("DOMContentLoaded", () => {
-  render(BUTTONS);
+  render(BUTTONS, operations);
 });
