@@ -1,3 +1,4 @@
+import { formattingInput } from "./formatting.js";
 const container = document.querySelector(".container");
 const outputLine = document.querySelector(".output");
 
@@ -26,5 +27,12 @@ export const render = (buttons, operations) => {
 };
 
 container.addEventListener("click", (e) => {
-  outputLine.textContent += e.target.value;
+  const char = e.target.value;
+  console.log(char);
+  const computingString = outputLine.textContent;
+  if (char === "AC") {
+    outputLine.textContent = "";
+  } else {
+    outputLine.textContent = formattingInput(computingString, char);
+  }
 });
