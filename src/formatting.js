@@ -1,35 +1,35 @@
 import { OPERATIONS, SPECIAL } from "./const.js";
 const operators = Object.keys(OPERATIONS);
-export const formattingInput = (computingString, char) => {
-  const lastOperationIndex = computingString
+export const formattingInput = (expression, char) => {
+  const lastOperationIndex = expression
     .split("")
     .reduce((lastIndex, char, i) => {
-      return operators.includes(char) && computingString[i - 1] != "("
+      return operators.includes(char) && expression[i - 1] != "("
         ? i
         : lastIndex;
     }, -1);
 
   if (operators.includes(char)) {
-    return formattingOperation(computingString, char);
+    return formattingOperation(expression, char);
   }
   if (SPECIAL.includes(char)) {
     console.log("special,", lastOperationIndex);
-    return formattingSpecial(computingString, char, lastOperationIndex);
+    return formattingSpecial(expression, char, lastOperationIndex);
   }
-  return computingString + char;
+  return expression + char;
 };
 
-const formattingOperation = (computingString, char) => {
-  const lastChar = computingString.at(-1);
-  const secondLastChar = computingString.at(-2);
+const formattingOperation = (expression, char) => {
+  const lastChar = expression.at(-1);
+  const secondLastChar = expression.at(-2);
 
   if (lastChar === char) {
-    return computingString;
+    return expression;
   }
 
   if (operators.includes(lastChar)) {
     if (char === "-" && lastChar !== "-") {
-      return computingString + char;
+      return expression + char;
     }
 
     if (
@@ -37,20 +37,20 @@ const formattingOperation = (computingString, char) => {
       operators.includes(secondLastChar) &&
       char !== "-"
     ) {
-      return computingString.slice(0, -2) + char;
+      return expression.slice(0, -2) + char;
     }
 
-    return computingString.slice(0, -1) + char;
+    return expression.slice(0, -1) + char;
   }
 
-  return computingString + char;
+  return expression + char;
 };
 
-const formattingSpecial = (computingString, char, lastOperationIndex) => {
-  const lastChar = computingString.at(-1);
+const formattingSpecial = (expression, char, lastOperationIndex) => {
+  const lastChar = expression.at(-1);
 
   const getCurrentNumber = () => {
-    let numberPart = computingString.slice(lastOperationIndex + 1);
+    let numberPart = expression.slice(lastOperationIndex + 1);
     console.log("1numberPart", numberPart);
     if (numberPart.startsWith("(") && numberPart.endsWith(")")) {
       return numberPart.slice(2, -1);
@@ -61,79 +61,92 @@ const formattingSpecial = (computingString, char, lastOperationIndex) => {
   const currentNumber = getCurrentNumber();
   switch (char) {
     case ",":
-      return formattingComma(computingString, lastChar, lastOperationIndex);
+      return formattingComma(expression, lastChar, lastOperationIndex);
     case "±":
-      return formattingPlusMinus(
-        computingString,
-        currentNumber,
-        lastOperationIndex
+      return formattingPlusMinus(expression, currentNumber, lastOperationIndex);
+    case "%":
+      return formattingPercent(
+        expression,
+        lastChar,
+        lastOperationIndex,
+        currentNumber
       );
     default:
-      return computingString + char;
+      return expression + char;
   }
 };
 
-const formattingComma = (computingString, lastChar, lastOperationIndex) => {
+const formattingComma = (expression, lastChar, lastOperationIndex) => {
   if (lastChar === ",") {
-    return computingString;
+    return expression;
   }
 
-  const currentNumber = computingString.slice(lastOperationIndex + 1);
+  const currentNumber = expression.slice(lastOperationIndex + 1);
 
   const hasComma = currentNumber.includes(",");
 
   if (hasComma) {
-    return computingString;
+    return expression;
   }
 
   if (currentNumber === "") {
-    return computingString + "0,";
+    return expression + "0,";
   }
 
-  return computingString + ",";
+  return expression + ",";
 };
 
-const formattingPlusMinus = (
-  computingString,
-  currentNumber,
-  lastOperationIndex
-) => {
-  const currentOperator = computingString[lastOperationIndex];
-  const prevChar = computingString[lastOperationIndex - 1];
+const formattingPlusMinus = (expression, currentNumber, lastOperationIndex) => {
+  const currentOperator = expression[lastOperationIndex];
+  const prevChar = expression[lastOperationIndex - 1];
 
   if (currentOperator === "-") {
     if (operators.includes(prevChar)) {
-      return computingString.slice(0, lastOperationIndex) + currentNumber;
+      return expression.slice(0, lastOperationIndex) + currentNumber;
     }
-    return computingString.slice(0, lastOperationIndex) + "+" + currentNumber;
+    return expression.slice(0, lastOperationIndex) + "+" + currentNumber;
   }
 
   if (currentOperator === "+") {
     if (prevChar === "(") {
       console.log(currentNumber);
-      return computingString.slice(0, lastOperationIndex - 1) + currentNumber;
+      return expression.slice(0, lastOperationIndex - 1) + currentNumber;
     }
 
-    return computingString.slice(0, lastOperationIndex) + "-" + currentNumber;
+    return expression.slice(0, lastOperationIndex) + "-" + currentNumber;
   }
 
   if (currentOperator === "×" || currentOperator === "÷") {
-    if (computingString[lastOperationIndex + 1] === "(") {
-      return computingString.slice(0, lastOperationIndex + 1) + currentNumber;
+    if (expression[lastOperationIndex + 1] === "(") {
+      return expression.slice(0, lastOperationIndex + 1) + currentNumber;
     }
     return (
-      computingString.slice(0, lastOperationIndex + 1) +
-      "(-" +
-      currentNumber +
-      ")"
+      expression.slice(0, lastOperationIndex + 1) + "(-" + currentNumber + ")"
     );
   }
 
   if (lastOperationIndex === -1) {
-    if (computingString.startsWith("-")) {
-      return computingString.slice(1);
+    if (expression.startsWith("-")) {
+      return expression.slice(1);
     } else {
-      return "-" + computingString;
+      return "-" + expression;
     }
   }
+};
+
+const formattingPercent = (
+  expression,
+  lastChar,
+  lastOperationIndex,
+  currentNumber
+) => {
+  if (operators.includes(lastChar)) {
+    return expression.slice(0, lastOperationIndex) + "%";
+  }
+  if (lastChar === "%") {
+    return (
+      expression.slice(0, lastOperationIndex + 1) + "(" + currentNumber + ")%"
+    );
+  }
+  return expression + "%";
 };

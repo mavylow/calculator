@@ -1,3 +1,4 @@
+import { calculate } from "./calculation.js";
 import { formattingInput } from "./formatting.js";
 const container = document.querySelector(".container");
 const outputLine = document.querySelector(".output");
@@ -21,6 +22,7 @@ export const render = (buttons, operations) => {
     if (Object.keys(operations).includes(button)) {
       buttonElement.className += " operation";
     }
+
     buttonElement.textContent = button;
     container.appendChild(buttonElement);
   });
@@ -28,11 +30,12 @@ export const render = (buttons, operations) => {
 
 container.addEventListener("click", (e) => {
   const char = e.target.value;
-  console.log(char);
-  const computingString = outputLine.textContent;
+  const expression = outputLine.textContent;
   if (char === "AC") {
     outputLine.textContent = "";
+  } else if (char === "=") {
+    outputLine.textContent = calculate(expression, char);
   } else {
-    outputLine.textContent = formattingInput(computingString, char);
+    outputLine.textContent = formattingInput(expression, char);
   }
 });

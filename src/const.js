@@ -25,7 +25,6 @@ export const OPERATIONS = {
   "-": 1,
   "÷": 2,
   "×": 2,
-  "=": 3,
 };
 
 export const SPECIAL = [",", "±", "%"];
