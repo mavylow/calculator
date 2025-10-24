@@ -29,7 +29,7 @@ container.addEventListener("click", (e) => {
   const char = e.target.value;
   const expression = outputLine.textContent;
   if (char === "AC") {
-    outputLine.textContent = "";
+    outputLine.textContent = "0";
   } else if (char === "=") {
     outputLine.textContent = calculate(expression, char);
   } else {
