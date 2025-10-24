@@ -1,5 +1,5 @@
 import { OPERATIONS } from "./const";
-const ALL_OPERATIONS = { ...OPERATIONS, "%": 3 };
+const ALL_OPERATIONS = { ...OPERATIONS, "%": 3, mod: 2 };
 export const calculate = (expression) => {
   const numbers = [];
   const operators = [];
@@ -11,7 +11,7 @@ export const calculate = (expression) => {
 
   for (let i = 0; i < expr.length; i++) {
     const char = expr[i];
-
+    const nextChar = expr[i + 1];
     if (/[\d.]/.test(char)) {
       currentNumber += char;
     }
@@ -23,6 +23,11 @@ export const calculate = (expression) => {
 
       if (char === "-" && (i === 0 || ALL_OPERATIONS[expr[i - 1]])) {
         currentNumber += "-";
+      } else if (
+        char === "%" &&
+        (/[\d.]/.test(nextChar) || nextChar !== undefined)
+      ) {
+        operators.push("mod");
       } else {
         operators.push(char);
       }
@@ -32,7 +37,8 @@ export const calculate = (expression) => {
   if (currentNumber) {
     numbers.push(parseFloat(currentNumber));
   }
-
+  console.log(numbers);
+  console.log(operators);
   for (let priority = 3; priority > 0; priority--) {
     let j = 0;
     while (j < operators.length) {
@@ -53,7 +59,9 @@ export const calculate = (expression) => {
                 ? firstNum * secondNum
                 : currentOperation === "÷"
                   ? firstNum / secondNum
-                  : firstNum;
+                  : currentOperation === "mod"
+                    ? firstNum % secondNum
+                    : firstNum;
 
         numbers.splice(j, 2, resultNumber);
         operators.splice(j, 1);

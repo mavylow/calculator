@@ -1,5 +1,6 @@
 import { OPERATIONS, SPECIAL } from "./const.js";
 const operators = Object.keys(OPERATIONS);
+
 export const formattingInput = (expression, char) => {
   const lastOperationIndex = expression
     .split("")
@@ -15,13 +16,27 @@ export const formattingInput = (expression, char) => {
   if (SPECIAL.includes(char)) {
     return formattingSpecial(expression, char, lastOperationIndex);
   }
-  if (expression.at(-1) === "0" && !SPECIAL[char] && !OPERATIONS[char]) {
+
+  if (
+    expression.at(-1) === "0" &&
+    !isPartOfNumber(expression, lastOperationIndex)
+  ) {
     return expression.slice(0, expression.length - 1) + char;
   }
+
   if (char === "0") {
     return formattingZero(expression, char, lastOperationIndex);
   }
   return expression + char;
+};
+
+const isPartOfNumber = (expression, lastOperationIndex) => {
+  const currentNumber = expression.slice(lastOperationIndex + 1);
+
+  if (currentNumber === "0") {
+    return false;
+  }
+  return currentNumber.length > 1 || currentNumber.includes(",");
 };
 
 const formattingOperation = (expression, char) => {
@@ -73,7 +88,7 @@ const formattingSpecial = (expression, char, lastOperationIndex) => {
         expression,
         lastChar,
         lastOperationIndex,
-        currentNumber,
+        currentNumber
       );
     default:
       return expression + char;
@@ -86,7 +101,6 @@ const formattingComma = (expression, lastChar, lastOperationIndex) => {
   }
 
   const currentNumber = expression.slice(lastOperationIndex + 1);
-
   const hasComma = currentNumber.includes(",");
 
   if (hasComma) {
@@ -141,7 +155,7 @@ const formattingPercent = (
   expression,
   lastChar,
   lastOperationIndex,
-  currentNumber,
+  currentNumber
 ) => {
   if (operators.includes(lastChar)) {
     return expression.slice(0, lastOperationIndex) + "%";
