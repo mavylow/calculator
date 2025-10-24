@@ -88,7 +88,7 @@ const formattingSpecial = (expression, char, lastOperationIndex) => {
         expression,
         lastChar,
         lastOperationIndex,
-        currentNumber
+        currentNumber,
       );
     default:
       return expression + char;
@@ -155,7 +155,7 @@ const formattingPercent = (
   expression,
   lastChar,
   lastOperationIndex,
-  currentNumber
+  currentNumber,
 ) => {
   if (operators.includes(lastChar)) {
     return expression.slice(0, lastOperationIndex) + "%";

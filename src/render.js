@@ -1,5 +1,3 @@
-import { calculate } from "./calculation.js";
-import { formattingInput } from "./formatting.js";
 const container = document.querySelector(".container");
 const outputLine = document.querySelector(".output");
 
@@ -24,15 +22,3 @@ export const render = (buttons, operations) => {
     container.appendChild(buttonElement);
   });
 };
-
-container.addEventListener("click", (e) => {
-  const char = e.target.value;
-  const expression = outputLine.textContent;
-  if (char === "AC") {
-    outputLine.textContent = "0";
-  } else if (char === "=") {
-    outputLine.textContent = calculate(expression, char);
-  } else {
-    outputLine.textContent = formattingInput(expression, char);
-  }
-});

@@ -37,8 +37,7 @@ export const calculate = (expression) => {
   if (currentNumber) {
     numbers.push(parseFloat(currentNumber));
   }
-  console.log(numbers);
-  console.log(operators);
+
   for (let priority = 3; priority > 0; priority--) {
     let j = 0;
     while (j < operators.length) {
