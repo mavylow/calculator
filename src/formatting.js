@@ -55,7 +55,7 @@ const formattingSpecial = (expression, char, lastOperationIndex) => {
   const lastChar = expression.at(-1);
 
   const getCurrentNumber = () => {
-    let numberPart = expression.slice(lastOperationIndex + 1);
+    const numberPart = expression.slice(lastOperationIndex + 1);
     if (numberPart.startsWith("(") && numberPart.endsWith(")")) {
       return numberPart.slice(2, -1);
     }
@@ -73,7 +73,7 @@ const formattingSpecial = (expression, char, lastOperationIndex) => {
         expression,
         lastChar,
         lastOperationIndex,
-        currentNumber
+        currentNumber,
       );
     default:
       return expression + char;
@@ -113,7 +113,6 @@ const formattingPlusMinus = (expression, currentNumber, lastOperationIndex) => {
 
   if (currentOperator === "+") {
     if (prevChar === "(") {
-      console.log(currentNumber);
       return expression.slice(0, lastOperationIndex - 1) + currentNumber;
     }
 
@@ -142,7 +141,7 @@ const formattingPercent = (
   expression,
   lastChar,
   lastOperationIndex,
-  currentNumber
+  currentNumber,
 ) => {
   if (operators.includes(lastChar)) {
     return expression.slice(0, lastOperationIndex) + "%";

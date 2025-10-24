@@ -48,12 +48,12 @@ export const calculate = (expression) => {
           currentOperation === "+"
             ? firstNum + secondNum
             : currentOperation === "-"
-            ? firstNum - secondNum
-            : currentOperation === "×"
-            ? firstNum * secondNum
-            : currentOperation === "÷"
-            ? firstNum / secondNum
-            : firstNum;
+              ? firstNum - secondNum
+              : currentOperation === "×"
+                ? firstNum * secondNum
+                : currentOperation === "÷"
+                  ? firstNum / secondNum
+                  : firstNum;
 
         numbers.splice(j, 2, resultNumber);
         operators.splice(j, 1);

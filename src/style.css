@@ -1,75 +1,67 @@
-*{
-    font-size: 40px;
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: rgb(253, 253, 253);
+* {
+  font-size: 40px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: rgb(253, 253, 253);
 }
 body {
-display: flex;
-align-items: center;
-justify-content: center;
-min-height: 100vh;
-
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
 }
-.calculator{
-    display: flex;
-    flex-direction: column;
-    width: 420px;
-    justify-content: center;
-    align-items: center;
-    background-color: #5d5d5d;
-    border-radius: 10px;
-    padding: 20px;
-  
-  
-    
+.calculator {
+  display: flex;
+  flex-direction: column;
+  width: 420px;
+  justify-content: center;
+  align-items: center;
+  background-color: #5d5d5d;
+  border-radius: 10px;
+  padding: 20px;
 }
 .output {
-    display: flex;
-    align-items: center;
-    justify-content: end;
-    height: 2em;
-    width: 400px;
-    padding: 10px;
-
-
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  height: 2em;
+  width: 400px;
+  padding: 10px;
 }
 .container {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1px;
-    width: 400px;
-    padding: 10px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  width: 400px;
+  padding: 10px;
 }
 
 .button {
-    height: 90px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgb(137, 137, 137);
-    border: 1px solid  rgb(137, 137, 137);
-    
-    cursor: pointer;
- 
-    
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(137, 137, 137);
+  border: 1px solid rgb(137, 137, 137);
+
+  cursor: pointer;
 }
 .operation {
-    background-color: orange;
-    border: 1px solid orange;
+  background-color: orange;
+  border: 1px solid orange;
 }
 .special {
-    background-color: #717171;
-    border: 1px solid #717171;
+  background-color: #717171;
+  border: 1px solid #717171;
 }
 
 #zero {
-   grid-column: span 2;
+  grid-column: span 2;
 }
 
 .button:hover {
-    background-color: #9c9c9c;
+  background-color: #9c9c9c;
 }
 
 .operation:hover {
-    background-color: rgb(255, 171, 16);
+  background-color: rgb(255, 171, 16);
 }

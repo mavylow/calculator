@@ -4,14 +4,6 @@ const container = document.querySelector(".container");
 const outputLine = document.querySelector(".output");
 
 export const render = (buttons, operations) => {
-  if (!container) {
-    console.error("Calculator container not found");
-    return;
-  }
-  if (!outputLine) {
-    console.error("Calculator ou not found");
-    return;
-  }
   outputLine.textContent = "0";
 
   buttons.forEach((button) => {
