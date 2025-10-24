@@ -23,12 +23,14 @@
     "lint": "eslint src/**/*.js",
     "lint:fix": "eslint src/**/*.js --fix",
     "format": "prettier --write src/**/*.js",
-    "prepare": "husky"
+     "prepare": "husky init"
   },
-  "lint-staged": {
-    "src/**/*.js": [
-      "eslint --fix",
-      "prettier --write"
-    ]
-  }
+  
+    "lint-staged": {
+      "src/**/*.js": [
+        "eslint --fix",
+        "prettier --write"
+      ]
+    }
+  
 }
