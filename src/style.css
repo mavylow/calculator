@@ -24,9 +24,14 @@ min-height: 100vh;
     
 }
 .output {
+    display: flex;
+    align-items: center;
+    justify-content: end;
     height: 2em;
     width: 400px;
     padding: 10px;
+
+
 }
 .container {
     display: grid;

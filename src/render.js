@@ -8,6 +8,11 @@ export const render = (buttons, operations) => {
     console.error("Calculator container not found");
     return;
   }
+  if (!outputLine) {
+    console.error("Calculator ou not found");
+    return;
+  }
+  outputLine.textContent = "0";
 
   buttons.forEach((button) => {
     const buttonElement = document.createElement("div");

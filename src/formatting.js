@@ -13,8 +13,13 @@ export const formattingInput = (expression, char) => {
     return formattingOperation(expression, char);
   }
   if (SPECIAL.includes(char)) {
-    console.log("special,", lastOperationIndex);
     return formattingSpecial(expression, char, lastOperationIndex);
+  }
+  if (expression.at(-1) === "0" && !SPECIAL[char] && !OPERATIONS[char]) {
+    return expression.slice(0, expression.length - 1) + char;
+  }
+  if (char === "0") {
+    return formattingZero(expression, char, lastOperationIndex);
   }
   return expression + char;
 };
@@ -51,7 +56,6 @@ const formattingSpecial = (expression, char, lastOperationIndex) => {
 
   const getCurrentNumber = () => {
     let numberPart = expression.slice(lastOperationIndex + 1);
-    console.log("1numberPart", numberPart);
     if (numberPart.startsWith("(") && numberPart.endsWith(")")) {
       return numberPart.slice(2, -1);
     }
@@ -149,4 +153,17 @@ const formattingPercent = (
     );
   }
   return expression + "%";
+};
+
+const formattingZero = (expression, char, lastOperationIndex) => {
+  const currentNumber = expression.slice(lastOperationIndex + 1);
+  const hasComma = currentNumber.includes(",");
+
+  if (hasComma) {
+    return expression + char;
+  }
+  if (currentNumber.startsWith("0")) {
+    return expression;
+  }
+  return expression + char;
 };
