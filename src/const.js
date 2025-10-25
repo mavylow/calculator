@@ -23,8 +23,8 @@ export const BUTTONS = [
 export const OPERATIONS = {
   "+": 1,
   "-": 1,
-  "÷": 2,
-  "×": 2,
+  "÷": 3,
+  "×": 3,
 };
 
 export const SPECIAL = [",", "±", "%"];
