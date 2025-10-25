@@ -20,13 +20,21 @@ body {
   padding: 20px;
 }
 .output {
-  display: flex;
-  align-items: center;
-  justify-content: end;
+  text-align: end;
   height: 2em;
   width: 400px;
   padding: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  background-color: #4a4a4a;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: #888 #4a4a4a;
+  display: block; /* 👈 заменили flex на block */
 }
+
 .container {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
