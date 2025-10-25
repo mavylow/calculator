@@ -1,5 +1,6 @@
 import { OPERATIONS } from "./const";
-const ALL_OPERATIONS = { ...OPERATIONS, "low%": 2, "high%": 4, mod: 3 };
+
+const ALL_OPERATIONS = { ...OPERATIONS, "%": 5, "low%": 2, "high%": 4, mod: 3 };
 
 export const calculate = (expression) => {
   const numbers = [];
@@ -7,8 +8,7 @@ export const calculate = (expression) => {
   let currentNumber = "";
 
   let expr = expression[0] === "-" ? "0" + expression : expression;
-  expr = expr.replace(/,/g, ".");
-  expr = expr.replace(/[()]/g, "");
+  expr = expr.replace(/,/g, ".").replace(/[()]/g, "");
 
   for (let i = 0; i < expr.length; i++) {
     const char = expr[i];
@@ -16,33 +16,29 @@ export const calculate = (expression) => {
 
     if (/[\d.]/.test(char)) {
       currentNumber += char;
+      continue;
     }
 
-    if (ALL_OPERATIONS[char] && !/[\d.]/.test(char)) {
+    if (ALL_OPERATIONS[char]) {
       if (currentNumber) {
         numbers.push(parseFloat(currentNumber));
         currentNumber = "";
       }
 
       if (char === "-" && (i === 0 || ALL_OPERATIONS[expr[i - 1]])) {
-        currentNumber += "-";
-      } else if (char === "%") {
-        const hasNextNumber = nextChar && /[\d.]/.test(nextChar);
+        currentNumber = "-";
+        continue;
+      }
 
-        if (hasNextNumber) {
+      if (char === "%") {
+        const hasNextNum = nextChar && /[\d.]/.test(nextChar);
+        if (hasNextNum) {
           operators.push("mod");
         } else {
-          const prevOperator = operators[operators.length - 1];
-
-          if (!prevOperator) {
-            operators.push("high%");
-          } else if (prevOperator === "+" || prevOperator === "-") {
-            operators.push("low%");
-          } else if (prevOperator === "×" || prevOperator === "÷") {
-            operators.push("high%");
-          } else {
-            operators.push("high%");
-          }
+          const prev = operators.at(-1);
+          if (!prev) operators.push("high%");
+          else if (["+", "-"].includes(prev)) operators.push("low%");
+          else operators.push("high%");
         }
       } else {
         operators.push(char);
@@ -50,81 +46,82 @@ export const calculate = (expression) => {
     }
   }
 
-  if (currentNumber) {
-    numbers.push(parseFloat(currentNumber));
-  }
+  if (currentNumber) numbers.push(parseFloat(currentNumber));
 
-  console.log("Numbers:", numbers);
-  console.log("Operators:", operators);
-
-  for (let priority = 4; priority > 0; priority--) {
+  for (let priority = 5; priority > 0; priority--) {
     let j = 0;
     while (j < operators.length) {
-      const currentOperation = operators[j];
+      const op = operators[j];
+      if (ALL_OPERATIONS[op] !== priority) {
+        j++;
+        continue;
+      }
 
-      if (ALL_OPERATIONS[currentOperation] === priority) {
-        let resultNumber;
+      let result;
+      const a = numbers[j];
+      const b = numbers[j + 1];
 
-        if (currentOperation === "high%") {
-          resultNumber = numbers[j] / 100;
-          numbers.splice(j, 1, resultNumber);
+      switch (op) {
+        case "high%":
+          result = a / 100;
+          numbers.splice(j, 1, result);
           operators.splice(j, 1);
-        } else if (currentOperation === "low%") {
-          const percentValue = numbers[j] / 100;
+          break;
 
+        case "low%": {
+          const percent = a / 100;
           if (j > 0) {
-            const prevNumber = numbers[j - 1];
-            const prevOperator = operators[j - 1];
+            const prev = numbers[j - 1];
+            const prevOp = operators[j - 1];
+            if (prevOp === "+") result = prev + prev * percent;
+            else if (prevOp === "-") result = prev - prev * percent;
+            else result = percent;
 
-            if (prevOperator === "+") {
-              resultNumber = prevNumber + prevNumber * percentValue;
-            } else if (prevOperator === "-") {
-              resultNumber = prevNumber - prevNumber * percentValue;
-            } else {
-              resultNumber = percentValue;
-            }
-
-            numbers.splice(j - 1, 2, resultNumber);
+            numbers.splice(j - 1, 2, result);
             operators.splice(j - 1, 2);
+            j--;
           } else {
-            resultNumber = percentValue;
-            numbers.splice(j, 1, resultNumber);
+            numbers.splice(j, 1, percent);
             operators.splice(j, 1);
           }
-        } else {
-          const firstNum = numbers[j];
-          const secondNum = numbers[j + 1];
-
-          switch (currentOperation) {
-            case "+":
-              resultNumber = firstNum + secondNum;
-              break;
-            case "-":
-              resultNumber = firstNum - secondNum;
-              break;
-            case "×":
-              resultNumber = firstNum * secondNum;
-              break;
-            case "÷":
-              resultNumber = secondNum !== 0 ? firstNum / secondNum : NaN;
-              break;
-            case "mod":
-              resultNumber = secondNum !== 0 ? firstNum % secondNum : NaN;
-              break;
-            default:
-              resultNumber = firstNum;
-          }
-
-          if (isNaN(resultNumber)) {
-            return "Error";
-          }
-
-          numbers.splice(j, 2, resultNumber);
-          operators.splice(j, 1);
+          break;
         }
-      } else {
-        j++;
+
+        case "+":
+          result = a + b;
+          numbers.splice(j, 2, result);
+          operators.splice(j, 1);
+          break;
+
+        case "-":
+          result = a - b;
+          numbers.splice(j, 2, result);
+          operators.splice(j, 1);
+          break;
+
+        case "×":
+          result = a * b;
+          numbers.splice(j, 2, result);
+          operators.splice(j, 1);
+          break;
+
+        case "÷":
+          result = b !== 0 ? a / b : NaN;
+          numbers.splice(j, 2, result);
+          operators.splice(j, 1);
+          break;
+
+        case "mod":
+          result = b !== 0 ? a % b : NaN;
+          numbers.splice(j, 2, result);
+          operators.splice(j, 1);
+          break;
+
+        default:
+          j++;
       }
+
+      if (isNaN(result)) return "Error";
     }
   }
 
