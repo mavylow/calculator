@@ -32,7 +32,7 @@ body {
   margin-bottom: 10px;
   scrollbar-width: thin;
   scrollbar-color: #888 #4a4a4a;
-  display: block; /* 👈 заменили flex на block */
+  display: block;
 }
 
 .container {
